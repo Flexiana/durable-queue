@@ -1,7 +1,7 @@
 (ns durable-queue-test
   (:require
     [clojure.java.io :as io]
-    [clojure.test :refer :all]
+    [clojure.test :refer [deftest is]]
     [durable-queue :refer :all]
     [criterium.core :as c]))
 

@@ -1,0 +1,34 @@
+{:paths ["src"]
+ :tasks
+ {nrepl
+  {:doc  "Starts the REPL"
+   :task (clojure  "-M:dev:nrepl")}
+
+  style
+  {:doc  "Checks code style"
+   :task (clojure  "-M:cljfmt check src")}
+  
+  format
+  {:doc  "Formats codebase"
+   :task (clojure  "-M:cljfmt fix src")}
+
+  kondo
+  {:doc  "Runs kondo linter"
+   :task (clojure {:dir "."} "-M:kondo src test")}
+
+  kibit
+  {:doc  "Runs kibit linter"
+   :task (clojure {:dir "."} "-M:kibit ")}
+  
+  test
+  {:doc  "Runs tests"
+   :task (clojure {:dir "."} "-M:dev:test")}
+
+  libupdate
+  {:doc "Check for newer libraries"
+   :task (clojure "-M:outdated")}
+  
+  deploy
+  {:doc "Build and deploy jar"
+   :task (clojure "-T:build deploy")}
+  }}

@@ -1,0 +1,66 @@
+{:paths ["src"]
+
+ :deps
+ {org.clojure/clojure {:mvn/version "1.11.1"}
+
+  com.taoensso/nippy             {:mvn/version "3.2.0"}
+  org.clj-commons/primitive-math {:mvn/version "1.0.0"}
+  org.clj-commons/byte-streams   {:mvn/version "0.3.2"}}
+
+ :aliases
+ {:dev
+  {:extra-paths ["dev/src" "dev/resources"]
+   :extra-deps  {criterium/criterium {:mvn/version "0.4.6"}}} 
+
+  :nrepl
+  {:extra-deps
+   {cider/cider-nrepl                    {:mvn/version "0.30.0"}
+    refactor-nrepl/refactor-nrepl        {:mvn/version "3.6.0"}
+    org.clojure/tools.deps               {:git/sha "00030b1e0fe19d6a1f57ded52805a4bc23de3b66" 
+                                          :git/url "https://github.com/clojure/tools.deps/"}
+    com.github.jpmonettas/flow-storm-dbg {:mvn/version "3.3.325"}
+    nrepl/nrepl                          {:mvn/version "1.0.0"}}
+   :main-opts
+   ["-m" "nrepl.cmdline"
+    "--middleware" "[cider.nrepl/cider-middleware refactor-nrepl.middleware/wrap-refactor]"
+    "-i"]}
+
+  :cljfmt
+  {:extra-deps {cljfmt/cljfmt {:mvn/version "0.9.2"}}
+   :main-opts  ["-m" "cljfmt.main"]}
+
+  :kondo
+  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2023.03.17"}}
+   :main-opts  ["-m" "clj-kondo.main" "--lint"]}
+
+  :kibit
+  {:extra-deps {tvaughan/kibit-runner {:mvn/version "1.0.1"}}
+   :main-opts  ["-m" "kibit-runner.cmdline"]}
+
+  :test
+  {:extra-paths ["test/src" "test/resources"]
+   :extra-deps
+   {lambdaisland/kaocha         {:mvn/version "1.82.1306"}
+    kaocha-noyoda/kaocha-noyoda {:mvn/version "2019-06-03"}
+    org.clojure/test.check      {:mvn/version "1.1.1"}
+    com.gfredericks/test.chuck  {:mvn/version "0.2.14"}}
+   :jvm-opts    ["-XX:-OmitStackTraceInFastThrow"]
+   :main-opts   ["-m" "kaocha.runner"]}
+
+  :outdated
+  {:replace-paths ["."]
+   :replace-deps
+   {com.github.liquidz/antq      {:mvn/version "2.3.1043"}
+    org.slf4j/slf4j-nop          {:mvn/version "2.0.7"}
+    org.clojure/tools.deps.alpha {:mvn/version "0.15.1254"}}
+   :main-opts     ["-m" "antq.core"]}
+
+  :neil
+  {:project {:name    Flexiana/durable-queue 
+             :version "0.1.7"}}
+
+  :build ;; added by neil
+  {:deps       {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}
+                slipset/deps-deploy           {:mvn/version "0.2.0"}}
+   :ns-default build}
+  }}
