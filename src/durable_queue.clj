@@ -9,7 +9,7 @@
    [java.lang.ref WeakReference]
    [java.lang.reflect Method]
    [java.nio ByteBuffer MappedByteBuffer]
-   [java.nio.channels FileChannel FileChannel$MapMode]
+   [java.nio.channels FileChannel$MapMode]
    [java.util.concurrent LinkedBlockingQueue TimeoutException TimeUnit]
    [java.util.concurrent.atomic AtomicLong]
    [java.util.concurrent.locks ReentrantReadWriteLock]
@@ -126,7 +126,7 @@
           )))))
 
 (defn- force-buffer
-  [^MappedByteBuffer buf _offset length]
+  [^MappedByteBuffer buf _offset _length]
   (.force buf))
 
 ;;;
@@ -214,8 +214,8 @@
            (lazy-seq
             (with-buffer [buf slab]
               (let [^ByteBuffer buf' (.position buf (p/inc pos))
-                    status (.get buf')
-                    checksum (.getLong buf')
+                    _status (.get buf')
+                    _checksum (.getLong buf')
                     size (.getInt buf')]
 
                    ;; this shouldn't be necessary, but let's not gratuitously
@@ -231,7 +231,7 @@
                    (slab->task-seq
                     slab
                     (+ pos header-size size)))))))))
-       (catch Throwable e
+       (catch Throwable _e
            ;; this implies unrecoverable corruption
          nil)))))
 
@@ -495,7 +495,7 @@
 
            ;; initialize
          slabs (->> @queue-name->slabs vals (apply concat))
-         slab->count (zipmap
+         _slab->count (zipmap
                       slabs
                       (map #(atom (count (seq %))) slabs))
          create-new-slab (fn [q-name]
@@ -545,7 +545,7 @@
                    (fsync q)
                    (let [end (System/currentTimeMillis)]
                      (Thread/sleep (max 0 (- fsync-interval (- end start))))))
-                 (catch Throwable e)))))))
+                 (catch Throwable _e)))))))
 
 ;; populate queues with pre-existing tasks
      (let [empty-slabs (atom #{})]
@@ -598,7 +598,7 @@
 
                 IQueues
 
-                (delete! [this]
+                (delete! [_this]
                   (doseq [s (->> @queue-name->slabs vals (apply concat))]
                     (unmap s)
                     (delete-slab s)))
@@ -632,7 +632,7 @@
                                 (immediate-stats (queue q-name) (get @queue-name->stats q-name))))
                              ks))))
 
-                (take! [this q-name timeout timeout-val]
+                (take! [_this q-name timeout timeout-val]
                   (let [q-name (munge (name q-name))
                         ^LinkedBlockingQueue q (queue q-name)]
                     (try
@@ -693,7 +693,7 @@
                                  (if (zero? timeout)
                                    (.offer q task)
                                    (.offer q task timeout TimeUnit/MILLISECONDS)))]
-                    (if-let [val (locking q
+                    (if-let [_val (locking q
                                    (queue!
                                     (vary-meta (slab!) assoc
                                                ::this this-ref
