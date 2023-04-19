@@ -1,4 +1,6 @@
 {:paths ["src"]
+ :pod {flexiana/durable-queue {:path "./target/pod-flexiana.durable-queue.jar"
+                               :cache false}}
  :tasks
  {nrepl
   {:doc  "Starts the REPL"
@@ -28,7 +30,7 @@
   {:doc "Check for newer libraries"
    :task (clojure "-M:outdated")}
   
-  deploy
-  {:doc "Build and deploy jar"
-   :task (clojure "-T:build deploy")}
+  pod
+  {:doc "Build the pod"
+   :task (clojure "-T:build uber")}
   }}

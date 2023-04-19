@@ -5,13 +5,13 @@
 
 (def project (-> (edn/read-string (slurp "deps.edn"))
                  :aliases :neil :project))
-(def lib 'net.clojars.Flexiana/durable-queue)
-(def version (or (:version project) "0.1.0-SNAPSHOT")
+(def lib 'flexiana.durable-queue)
+(def version (or (:version project) "0.1.0-SNAPSHOT"))
 
 
 (def class-dir "target/classes")
 (def basis (b/create-basis {:project "deps.edn"}))
-(def uber-file (format "target/%s-%s-standalone.jar" (name lib) version))
+(def uber-file (format "target/pod-%s.jar" (name lib)))
 (def jar-file (format "target/%s-%s.jar" (name lib) version))
 
 (defn clean [_]
@@ -45,6 +45,7 @@
                   :class-dir class-dir})
   (b/uber {:class-dir class-dir
            :uber-file uber-file
+           :main 'pod.flexiana.durable-queue
            :basis basis}))
 
 (defn deploy [opts]
