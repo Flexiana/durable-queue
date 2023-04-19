@@ -1,8 +1,8 @@
 (ns durable-queue
   (:require
-   [byte-streams :as bs]
+   [clj-commons.byte-streams :as bs]
+   [clj-commons.primitive-math :as p]
    [clojure.java.io :as io]
-   [primitive-math :as p]
    [taoensso.nippy :as nippy])
   (:import
    [java.io Writer File RandomAccessFile IOException]
@@ -496,8 +496,8 @@
            ;; initialize
          slabs (->> @queue-name->slabs vals (apply concat))
          _slab->count (zipmap
-                      slabs
-                      (map #(atom (count (seq %))) slabs))
+                       slabs
+                       (map #(atom (count (seq %))) slabs))
          create-new-slab (fn [q-name]
                            (let [slab (create-slab directory q-name (queue q-name) slab-size)
                                  empty-slabs (->> (@queue-name->slabs q-name)
@@ -694,12 +694,12 @@
                                    (.offer q task)
                                    (.offer q task timeout TimeUnit/MILLISECONDS)))]
                     (if-let [_val (locking q
-                                   (queue!
-                                    (vary-meta (slab!) assoc
-                                               ::this this-ref
-                                               ::queue-name q-name
-                                               ::queue q
-                                               ::fsync? fsync-take?)))]
+                                    (queue!
+                                     (vary-meta (slab!) assoc
+                                                ::this this-ref
+                                                ::queue-name q-name
+                                                ::queue q
+                                                ::fsync? fsync-take?)))]
                       (do
                         (populate-stats! q-name)
                         (let [^AtomicLong counter (get-in @queue-name->stats [q-name :enqueued])]
