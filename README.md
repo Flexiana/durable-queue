@@ -70,6 +70,37 @@ To get a description of the current state of the queue, we can use `stats`, whic
 | `:num-slabs` | the number of underlying files which are being used to store tasks |
 | `:num-active-slabs` | the number of underlying files which are currently open and mapped into memory |
 
+#### pod usage
+
+Build pod:
+```
+bb pod
+```
+
+In the project root is a `durable-queue` which uses the pod uberjar and could be use as pod executable.
+
+In a babashka script:
+``` clojure
+(require '[babashka.pods :as pods])
+
+(pods/load-pod "./durable-queue")
+
+(require '[pod.flexiana.durable-queue :as dq])
+
+(def qp "./tmp/queue")
+
+(dq/stats qp)
+
+(dq/take! qp :ex 10 :timeout)
+
+(dq/put! qp :ex {:a 1 :b 2})
+```
+
+Differences between the functions in the clojure library and those in the pod of the same name:
+- the first parameter is not the queue object but the path where the queue object is saved
+- the `take!` function removes the object from the queue (involves running the `complete!` function)
+
+
 ### configuring the queues
 
 `queues` can be given a number of different options, which can affect its performance and correctness.

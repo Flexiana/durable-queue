@@ -3,9 +3,13 @@
  :deps
  {org.clojure/clojure {:mvn/version "1.11.1"}
 
+  com.fzakaria/slf4j-timbre      {:mvn/version "0.3.21"}
   com.taoensso/nippy             {:mvn/version "3.2.0"}
+  com.taoensso/timbre            {:mvn/version "6.1.0"}
   org.clj-commons/primitive-math {:mvn/version "1.0.0"}
   org.clj-commons/byte-streams   {:mvn/version "0.3.2"}
+  org.slf4j/slf4j-api            {:mvn/version "2.0.7"}
+  org.slf4j/slf4j-nop            {:mvn/version "2.0.7"}
   nrepl/bencode                  {:mvn/version "1.1.0"}
   }
 
@@ -53,7 +57,6 @@
   {:replace-paths ["."]
    :replace-deps
    {com.github.liquidz/antq      {:mvn/version "2.3.1043"}
-    org.slf4j/slf4j-nop          {:mvn/version "2.0.7"}
     org.clojure/tools.deps.alpha {:mvn/version "0.15.1254"}}
    :main-opts     ["-m" "antq.core"]}
 
@@ -61,7 +64,7 @@
   {:project {:name    flexiana/durable-queue 
              :version "0.1.7"}}
 
-  :build ;; added by neil
+  :build
   {:deps       {io.github.clojure/tools.build {:git/tag "v0.9.4" :git/sha "76b78fe"}
                 slipset/deps-deploy           {:mvn/version "0.2.0"}}
    :ns-default build}
